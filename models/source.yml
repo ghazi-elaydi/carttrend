@@ -1,0 +1,254 @@
+version: 2
+
+sources:
+  - name: data_carttrend
+    schema: data_carttrend
+    description: "Données brutes des campagnes marketing"
+    tables:
+      - name: Carttrend_Campaigns
+        description: "Table contenant les données brutes des campagnes publicitaires"
+        columns:
+          - name: id_campagne
+            description: "Identifiant unique de la campagne"
+            tests:
+              - unique
+              - not_null
+          - name: date
+            description: "Date de la campagne"
+            tests:
+              - not_null
+          - name: événement_oui_non
+            description: "Indique si un événement marketing a eu lieu (ex. Soldes)"
+            tests:
+              - not_null
+          - name: événement_type
+            description: "Type de l'événement marketing (ex. Soldes, Nouveauté)"
+          - name: canal
+            description: "Canal publicitaire utilisé (Google Ads, Facebook, Instagram, etc.)"
+            tests:
+              - not_null
+          - name: budget
+            description: "Budget alloué pour la campagne"
+            tests:
+              - not_null
+          - name: impressions
+            description: "Nombre d'impressions générées par la campagne"
+            tests:
+              - not_null
+          - name: clics
+            description: "Nombre de clics générés par la campagne"
+            tests:
+              - not_null
+          - name: conversions
+            description: "Nombre de conversions générées par la campagne"
+            tests:
+              - not_null
+          - name: CTR
+            description: "Taux de clics calculé comme clics / impressions"
+            tests:
+              - not_null
+
+      - name: Carttrend_Commandes
+        description: "Table contenant les informations des commandes des clients"
+        columns:
+          - name: id_commande
+            description: "Identifiant unique de la commande"
+            tests:
+              - unique
+              - not_null
+          - name: id_client
+            description: "Identifiant unique du client ayant passé la commande"
+            tests:
+              - not_null
+          - name: id_entrepot_depart
+            description: "Identifiant de l'entrepôt d'où la commande a été expédiée"
+          - name: date_commande
+            description: "Date à laquelle la commande a été passée"
+            tests:
+              - not_null
+          - name: statut_commande
+            description: "Statut actuel de la commande (ex. En cours, Expédiée, Livrée)"
+            tests:
+              - not_null
+          - name: id_promotion_appliquee
+            description: "Identifiant de la promotion appliquée à la commande, le cas échéant"
+          - name: mode_de_paiement
+            description: "Mode de paiement choisi par le client (ex. Carte de crédit, PayPal)"
+            tests:
+              - not_null
+          - name: numero_tracking
+            description: "Numéro de suivi de la commande pour la livraison"
+          - name: date_livraison_estimee
+            description: "Date estimée de livraison de la commande"
+            tests:
+              - not_null
+
+      - name: Carttrend_Satisfaction
+        description: "Table contenant les retours de satisfaction des clients sur leurs commandes"
+        columns:
+          - name: id_satisfaction
+            description: "Identifiant unique de l'enquête de satisfaction"
+            tests:
+              - unique
+              - not_null
+          - name: id_commande
+            description: "Identifiant de la commande associée à la satisfaction"
+            tests:
+              - not_null
+          - name: note_client
+            description: "Note attribuée par le client (ex. de 1 à 5)"
+            tests:
+              - not_null
+          - name: commentaire
+            description: "Commentaire du client sur la commande"
+          - name: plainte
+            description: "Indication de la présence d'une plainte du client (ex. Oui/Non)"
+          - name: temps_reponse_support
+            description: "Temps de réponse du support client après une plainte"
+          - name: type_plainte
+            description: "Type de plainte formulée par le client (ex. Produit défectueux, Livraison en retard)"
+          - name: employe_support
+            description: "Nom ou identifiant de l'employé du support ayant pris en charge la plainte"
+
+      - name: Carttrend_Posts
+        description: "Table contenant les informations des posts effectués sur les réseaux sociaux"
+        columns:
+          - name: id_post
+            description: "Identifiant unique du post"
+            tests:
+              - unique
+              - not_null
+          - name: date_post
+            description: "Date à laquelle le post a été publié"
+            tests:
+              - not_null
+          - name: canal_social
+            description: "Plateforme de réseau social où le post a été publié (ex. Facebook, Instagram, Twitter)"
+            tests:
+              - not_null
+          - name: volume_mentions
+            description: "Volume total de mentions ou d'interactions générées par ce post"
+          - name: sentiment_global
+            description: "Sentiment général du post (positif, neutre, négatif)"
+          - name: contenu_post
+            description: "Contenu textuel ou description du post"
+
+      - name: Carttrend_Clients
+        description: "Informations sur les clients"
+        columns:
+          - name: id_client
+            description: "Identifiant unique du client"
+            tests:
+              - unique
+              - not_null
+          - name: prenom_client
+            description: "Prénom du client"
+          - name: nom_client
+            description: "Nom du client"
+          - name: email
+            description: "Adresse e-mail du client"
+          - name: âge
+            description: "Âge du client"
+          - name: genre
+            description: "Genre du client"
+          - name: fréquence_visites
+            description: "Fréquence des visites en magasin"
+          - name: favoris
+            description: "Produits favoris du client"
+          - name: date_inscription
+            description: "c'est la date d'inscription du client"
+
+      - name: Carttrend_Details_Commandes
+        description: "Détails des produits commandés"
+        columns:
+          - name: id_commande
+            description: "Identifiant unique de la commande"
+            tests:
+              - not_null
+          - name: id_produit
+            description: "Identifiant du produit commandé"
+          - name: quantite
+            description: "Quantité commandée"
+          - name: emballage_special
+            description: "Indication si un emballage spécial est demandé"
+
+      - name: Carttrend_Entrepots
+        description: "Informations sur les entrepôts"
+        columns:
+          - name: id_entrepot
+            description: "Identifiant unique de l'entrepôt"
+            tests:
+              - unique
+              - not_null
+          - name: localisation
+            description: "Localisation géographique de l'entrepôt"
+          - name: capacite_max
+            description: "Capacité maximale de stockage de l'entrepôt"
+          - name: volume_stocke
+            description: "Volume actuel stocké dans l'entrepôt"
+          - name: taux_remplissage
+            description: "Taux de remplissage en pourcentage"
+
+      - name: Carttrend_Entrepots_Machines
+        description: "Données sur les machines utilisées dans les entrepôts"
+        columns:
+          - name: id
+            description: "Identifiant unique de la ligne (clé primaire)"
+            tests:
+              - unique
+              - not_null
+          - name: id_machine
+            description: "Identifiant unique de la machine"
+            tests:
+              - unique
+          - name: id_entrepot
+            description: "Entrepôt où la machine est utilisée"
+          - name: type_machine
+            description: "Type de machine (Tri, Transport, etc.)"
+          - name: etat_machine
+            description: "État actuel de la machine"
+          - name: temps_darret
+            description: "Durée totale d'arrêt en heures"
+          - name: volume_traite
+            description: "Volume traité par la machine"
+          - name: mois
+            description: "Mois durant lequel l'événement a eu lieu"
+
+      - name: Carttrend_Promotions
+        description: "Données sur les promotions appliquées"
+        columns:
+          - name: id_promotion
+            description: "Identifiant unique de la promotion"
+            tests:
+              - unique
+              - not_null
+          - name: id_produit
+            description: "Produit associé à la promotion"
+          - name: type_promotion
+            description: "Type de promotion (Pourcentage ou Remise fixe)"
+          - name: valeur_promotion
+            description: "Valeur de la promotion"
+          - name: date_debut
+            description: "Date de début de la promotion"
+          - name: date_fin
+            description: "Date de fin de la promotion"
+          - name: responsable_promotion
+            description: "Responsable de la promotion"
+
+      - name: Carttrend_Produits
+        description: "Source contenant les informations sur les produits"
+        columns:
+          - name: ID
+            description: "Identifiant unique du produit"
+          - name: Catégorie
+            description: "Catégorie principale du produit"
+          - name: Marque
+            description: "Marque du produit (peut être vide)"
+          - name: Produit
+            description: "Nom ou description du produit"
+          - name: Prix
+            description: "Prix du produit en devise locale"
+          - name: Souscatégorie
+            description: "Sous-catégorie ou type spécifique"
+          - name: Variation
+            description: "Variation spécifique du produit (optionnel, ex: taille, couleur)"
