@@ -40,6 +40,8 @@ models:
           - accepted_values:
               values: [">=0"]  # Valider que le CTR n'est pas négatif
 
+
+
   - name: stg_produits
     description: "Modèle des produits avec leurs catégories, marques, prix, etc."
     columns:
