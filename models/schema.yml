@@ -40,7 +40,40 @@ models:
           - accepted_values:
               values: [">=0"]  # Valider que le CTR n'est pas négatif
 
-
+  - name: stg_produits
+    description: "Modèle des produits avec leurs catégories, marques, prix, etc."
+    columns:
+      - name: ID
+        description: "Identifiant unique du produit"
+        tests:
+          - not_null
+          - unique
+      - name: Catégorie
+        description: "Catégorie du produit"
+        tests:
+          - not_null
+      - name: Marque
+        description: "Marque du produit"
+        tests:
+          - not_null
+      - name: Produit
+        description: "Nom du produit"
+        tests:
+          - not_null
+      - name: Prix
+        description: "Prix du produit"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [ "prix_min", "prix_max" ]  # Ajustez avec des valeurs spécifiques si nécessaire
+      - name: Souscatégorie
+        description: "Sous-catégorie du produit"
+        tests:
+          - not_null
+      - name: Variation
+        description: "Variation du produit (ex: couleur, taille, etc.)"
+        tests:
+          - not_null
 
 
   - name: stg_commandes_data
