@@ -1,45 +1,45 @@
-WITH ventes_promotion AS (
-    SELECT 
-        SUM(d.`quantité` * p.Prix) AS total_ventes,
-        COUNT(DISTINCT c.id_commande) AS nb_commandes
+WITH commandes_details AS (
+    SELECT
+        c.id_commande,
+        c.date_commande,
+        d.id_produit,
+        p.Produit AS nom_produit,
+        d.`quantité`,
+        p.Prix,
+        c.`id_promotion_appliquée`
     FROM 
-        {{ ref('stg_commandes_data') }} c
+        {{ ref('stg_commandes_data') }} AS c
     JOIN 
-        {{ ref('stg_details_commandes_data') }} d ON c.id_commande = d.id_commande
+        {{ ref('stg_details_commandes_data') }} AS d 
+        ON c.id_commande = d.id_commande
     JOIN 
-        {{ ref('stg_produits') }} p ON d.id_produit = p.ID
-    WHERE 
-        c.`id_promotion_appliquée` IS NOT NULL
+        {{ ref('stg_produits') }} AS p
+        ON d.id_produit = p.ID
 ),
-ventes_sans_promotion AS (
-    SELECT 
-        SUM(d.`quantité` * p.Prix) AS total_ventes,
-        COUNT(DISTINCT c.id_commande) AS nb_commandes
-    FROM 
-        {{ ref('stg_commandes_data') }} c
-    JOIN 
-        {{ ref('stg_details_commandes_data') }} d ON c.id_commande = d.id_commande
-    JOIN 
-        {{ ref('stg_produits') }} p ON d.id_produit = p.ID
-    WHERE 
-        c.`id_promotion_appliquée` =""
-)
-SELECT 
-    'Avec Promotion' AS type_promotion, 
-    total_ventes, 
-    nb_commandes 
-FROM 
-    ventes_promotion
-UNION ALL
-SELECT 
-    'Sans Promotion' AS type_promotion, 
-    total_ventes, 
-    nb_commandes 
-FROM 
-    ventes_sans_promotion
 
--- ------ Calcul des produits populaires, produits favoris par groupe d'âge, et des ventes par catégorie.
--- Calcule les produits les plus populaires ou moins / pas achetés
--- Ventes par catégorie
--- Produits achetés ensemble
--- Calcule les ventes par mois, semaine et jour
+`commandes_aggregées` AS (
+    SELECT
+        id_commande,
+        date_commande,
+        SUM(`quantité` * Prix) AS total_commande,
+        CASE
+            WHEN `id_promotion_appliquée` !='' THEN 'Avec Promotion'
+            ELSE 'Sans Promotion'
+        END AS type_promotion,
+        nom_produit
+    FROM
+        commandes_details
+    GROUP BY
+        id_commande, date_commande, nom_produit, `id_promotion_appliquée`
+)
+
+SELECT
+    id_commande,
+    date_commande,
+    nom_produit,
+    total_commande,
+    type_promotion
+FROM 
+    `commandes_aggregées`
+ORDER BY
+    date_commande DESC

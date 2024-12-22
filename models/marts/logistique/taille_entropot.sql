@@ -1,13 +1,11 @@
-WITH entrepot_taille AS (
+WITH volume_traite AS (
     SELECT 
-        e.`id_entrepôt`, 
-        e.localisation, 
-        e.`capacité_max`, 
-        e.`volume_stocké`,
-        e.taux_remplissage
-    FROM {{ ref ('stg_entrepots_data') }} e
-    ORDER BY e.`volume_stocké` DESC
-    LIMIT 100  -- Ajout de LIMIT ici
+        `id_entrepôt`,
+        COUNT(`volume_traité`) AS `total_volume_traite`
+    FROM {{ ref('stg_machines_data') }} vt
+    GROUP BY `id_entrepôt`
+    ORDER BY total_volume_traite DESC
 )
-SELECT *
-FROM entrepot_taille
+
+SELECT * 
+FROM volume_traite

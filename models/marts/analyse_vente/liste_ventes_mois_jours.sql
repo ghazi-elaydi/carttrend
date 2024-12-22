@@ -3,7 +3,8 @@ WITH ventes_par_temps AS (
         EXTRACT(MONTH FROM CAST(c.date_commande AS DATE)) AS mois,
         EXTRACT(DAY FROM CAST(c.date_commande AS DATE)) AS jour,
         SUM(d.`quantité` * p.Prix) AS total_ventes,  
-        SUM(d.`quantité`) AS total_quantite_vendue  
+        SUM(d.`quantité`) AS total_quantite_vendue ,
+        p.`Catégorie` 
     FROM 
         {{ ref('stg_commandes_data') }} c
     JOIN 
@@ -13,13 +14,15 @@ WITH ventes_par_temps AS (
     WHERE 
         c.statut_commande = 'Livrée'  
     GROUP BY 
-        mois, jour
+        mois, jour, p.`Catégorie`
 )
 -- Liste des ventes par mois et jour
 SELECT 
     mois, jour,
+    `Catégorie`,
     total_ventes, 
-    total_quantite_vendue
+    total_quantite_vendue,
+    
 FROM 
     ventes_par_temps
 ORDER BY 

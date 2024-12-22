@@ -1,6 +1,6 @@
   -- Calcul du volume de mentions par sentiment
 WITH mentions_sentiments AS (
-  SELECT canal_social,sentiment_global,
+  SELECT canal_social,CAST(sentiment_global AS STRING) AS sentiment_global,
     SUM(volume_mentions) AS total_mentions  -- Compte le total des mentions
     
   FROM 
@@ -10,5 +10,3 @@ WITH mentions_sentiments AS (
 )
 SELECT *
 FROM mentions_sentiments
-
-

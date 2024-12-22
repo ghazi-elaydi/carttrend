@@ -162,6 +162,8 @@ models:
         description: "Volume total de mentions ou d'interactions générées par ce post"
       - name: sentiment_global
         description: "Sentiment général du post (positif, neutre, négatif)"
+        tests:
+          - not_null
       - name: contenu_post
         description: "Contenu textuel ou description du post"
 
